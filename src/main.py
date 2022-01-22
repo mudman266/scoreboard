@@ -3,11 +3,7 @@
 # main.py
 
 import menu
-import yaml
-
-# import pages
-import editSports
-import settings
+import collections
 
 
 def main_sequence():

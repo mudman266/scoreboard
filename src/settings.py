@@ -1,6 +1,8 @@
 import json
 import collections
 
+import menu
+
 
 class Settings:
 
@@ -17,15 +19,15 @@ class Settings:
         decision = input("Option: ")
         if int(decision) in menuItems:
             newMenu = Settings()
-            switcher = {
-                1: newMenu.printSettings(),
-                2: newMenu.editSettings(),
-                3: newMenu.exitToMain()
-            }
-            switcher.get(decision)
+            if int(decision) == 1:
+                newMenu.printSettings()
+            elif int(decision) == 2:
+                newMenu.editSettings()
+            elif int(decision) == 3:
+                newMenu.exitToMain()
         else:
             print("Not a valid selection. Try again.")
-            self.printMenu()
+            Settings.printMenu()
 
     def printSettings(self):
         # Grab the local path from settings file
@@ -33,9 +35,10 @@ class Settings:
         settings = json.load(_settingsFile)
         _localPath = settings['pathToScoreBoard']
         print(f"Local path: {_localPath}")
+        self.printMenu()
 
     def editSettings(self):
         pass
 
     def exitToMain(self):
-        pass
+        menu.Menu.printMenu()

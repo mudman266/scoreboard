@@ -3,18 +3,18 @@
 # main.py
 
 import menu
+import yaml
+
+# import pages
 import editSports
+import settings
 
 
 def main_sequence():
     # Show the menu
     userMenu = menu.Menu()
-    option = userMenu.printMenu()
 
-    switcher = {
-        1: editSports.Sports.showSports()
-    }
-    switcher.get(option)
+
 
 
 if __name__ == "__main__":

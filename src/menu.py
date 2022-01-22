@@ -20,7 +20,11 @@ class Menu(object):
             print(f"{key}: {val}")
         decision = input("Option: ")
         if int(decision) in menuItems:
-            return decision
+            switcher = {
+                1: settings.Settings.showMenu(),
+                2: editSports.Sports.showSports()
+            }
+            switcher.get(decision)
         else:
             print("Not a valid selection. Try again.")
             self.printMenu()

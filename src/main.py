@@ -11,7 +11,7 @@ def main_sequence():
     userMenu = menu.Menu()
     option = userMenu.printMenu()
 
-    # TODO - add a record to each team on the hockey list
+    # TODO - add a record to each team on the hockey list - selected (for scores)
     switcher = {
         1: editSports.Sports.showSports()
     }

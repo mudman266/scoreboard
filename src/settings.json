@@ -1,7 +1,3 @@
 {
-    "settings": [
-      {
-        "pathToScoreboard": "test"
-      }
-      ]
+      "pathToScoreBoard": "test"
 }

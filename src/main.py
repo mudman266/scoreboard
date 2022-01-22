@@ -13,8 +13,7 @@ import settings
 def main_sequence():
     # Show the menu
     userMenu = menu.Menu()
-
-
+    userMenu.printMenu()
 
 
 if __name__ == "__main__":

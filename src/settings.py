@@ -1,25 +1,26 @@
 import json
+import collections
+
 
 class Settings:
-    # Menu Options
-    menuOptions = {1: 'View Settings', 2: 'Edit Settings',
-                   3: 'Exit Settings'}
 
-    # Grab the local path from settings file
-    _settingsFile = json.loads('settings.json')
-    _localPath = _settingsFile[pathToScoreBoard]
-
-    def printMenu(self):
+    @staticmethod
+    def printMenu():
         # Prints the menu and returns a valid selection
-        menuItems = collections.ChainMap(self.menuOptions)
+        # Menu Options
+        menuOptions = {1: 'View Settings', 2: 'Edit Settings',
+                       3: 'Exit Settings'}
+
+        menuItems = collections.ChainMap(menuOptions)
         for key, val in menuItems.items():
             print(f"{key}: {val}")
         decision = input("Option: ")
         if int(decision) in menuItems:
+            newMenu = Settings()
             switcher = {
-                1: self.printSettings(),
-                2: self.editSettings(),
-                3: self.exitToMain()
+                1: newMenu.printSettings(),
+                2: newMenu.editSettings(),
+                3: newMenu.exitToMain()
             }
             switcher.get(decision)
         else:
@@ -27,7 +28,11 @@ class Settings:
             self.printMenu()
 
     def printSettings(self):
-        print(f"Local path: {self._localPath}")
+        # Grab the local path from settings file
+        _settingsFile = open('settings.json')
+        settings = json.load(_settingsFile)
+        _localPath = settings['pathToScoreBoard']
+        print(f"Local path: {_localPath}")
 
     def editSettings(self):
         pass

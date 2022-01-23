@@ -88,4 +88,15 @@ class Menu(object):
         scores = json.load(updatedScores)
         date = datetime.date.today()
         found = False
-        print(scores['dates'][0]['games'])
+
+        # Away Info
+        awayTeamName = scores['dates'][0]['games'][0]['teams']['away']['team']['name']
+        awayTeamScore = scores['dates'][0]['games'][0]['teams']['away']['score']
+
+        # Home Info
+        homeTeamName = scores['dates'][0]['games'][0]['teams']['home']['team']['name']
+        homeTeamScore = scores['dates'][0]['games'][0]['teams']['home']['score']
+
+        # Format and display info
+        print(f"{awayTeamName} {awayTeamScore}\n"
+              f"{homeTeamName} {homeTeamScore}")

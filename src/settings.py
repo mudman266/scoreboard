@@ -30,9 +30,7 @@ class Settings:
             Settings.printMenu()
 
     def printSettings(self):
-        # Grab the local path from settings file
-        _settingsFile = open('settings.json')
-        settings = json.load(_settingsFile)
+        settings = Settings.getSettings()
         _localPath = settings['pathToScoreBoard']
         print(f"Local path: {_localPath}")
         self.printMenu()
@@ -42,3 +40,10 @@ class Settings:
 
     def exitToMain(self):
         menu.Menu.printMenu()
+
+    @staticmethod
+    def getSettings():
+        # Grab the local path from settings file
+        _settingsFile = open('settings.json')
+        settings = json.load(_settingsFile)
+        return settings

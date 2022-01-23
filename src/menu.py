@@ -50,22 +50,42 @@ class Menu(object):
     def showScores():
         # get the date
         curDate = datetime.datetime.now()
-        print(f"{curDate.year}-{curDate.month}-{curDate.day}")
 
-        # Build the URL
-        scoreUrl = f"https://statsapi.web.nhl.com/api/v1/schedule?teamId=12&startDate=" \
-                   f"{curDate.year}-{curDate.month}-{curDate.day}" \
-                   f"&endDate=" \
-                   f"{curDate.year}-{curDate.month}-{curDate.day - 5}"
-
-        # Make the request and save the result
+        # do we need to update our scores file
         c = urllib3.PoolManager()
         curSettings = settings.Settings.getSettings()
         curPath = curSettings["pathToScoreBoard"]
-        scoresFile = curPath + "/src/scores.json"
-        with c.request('GET', scoreUrl, preload_content=False) as res, open(scoresFile, 'wb') as out_file:
-            shutil.copyfileobj(res, out_file)
+        lastUpdate = curSettings["lastUpdate"]
 
-        updatedScores = open(scoresFile)
+        # Build the URL
+        scoreUrl = f"https://statsapi.web.nhl.com/api/v1/schedule?teamId=12"
+
+        # Make the request and save the result
+
+        # If we have no lastUpdate value or if it is more than 15 mins in the past,
+        # run the update and update the last update time
+        timeMinus15Mins = datetime.timedelta(minutes=15)
+        scoresFile = curPath + "/src/scores.json"
+        if lastUpdate == ("") or (lastUpdate <= (datetime.datetime.timestamp(datetime.datetime.now()) -
+                                                datetime.datetime.timestamp(datetime.datetime.now() - timeMinus15Mins))):
+            # Updating scores
+            print("Updating scores...")
+
+            settingsFile = curPath + "/src/settings.json"
+            curSettings['lastUpdate'] = datetime.datetime.timestamp(datetime.datetime.now())
+            a = open(settingsFile, 'w')
+            json.dump(curSettings, a)
+            a.close()
+            with c.request('GET', scoreUrl, preload_content=False) as res, open(scoresFile, 'wb') as out_file:
+                shutil.copyfileobj(res, out_file)
+        else:
+            # Last update within 15 mins
+            print("Last update < 15 mins ago...skipping update.")
+
+
+        # Parse the scores file
+        updatedScores = open(scoresFile, "r")
         scores = json.load(updatedScores)
-        print(scores)
+        date = datetime.date.today()
+        found = False
+        print(scores['dates'][0]['games'])

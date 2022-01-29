@@ -58,7 +58,7 @@ class Menu(object):
         lastUpdate = curSettings["lastUpdate"]
 
         # Build the URL
-        scoreUrl = f"https://statsapi.web.nhl.com/api/v1/schedule?teamId=12"
+        scoreUrl = f"https://statsapi.web.nhl.com/api/v1/teams/12?expand=team.schedule.previous"
 
         # Make the request and save the result
 
@@ -66,8 +66,7 @@ class Menu(object):
         # run the update and update the last update time
         timeMinus15Mins = datetime.timedelta(minutes=15)
         scoresFile = curPath + "/src/scores.json"
-        if lastUpdate == ("") or (lastUpdate <= (datetime.datetime.timestamp(datetime.datetime.now()) -
-                                                datetime.datetime.timestamp(datetime.datetime.now() - timeMinus15Mins))):
+        if lastUpdate == ("") or (lastUpdate <= (datetime.datetime.timestamp(datetime.datetime.now() - timeMinus15Mins))):
             # Updating scores
             print("Updating scores...")
 
@@ -80,6 +79,8 @@ class Menu(object):
                 shutil.copyfileobj(res, out_file)
         else:
             # Last update within 15 mins
+            print(str(lastUpdate) + " was greater than " + str(datetime.datetime.timestamp(datetime.datetime.now() - timeMinus15Mins)))
+            print("tminus15mins: " + str(timeMinus15Mins))
             print("Last update < 15 mins ago...skipping update.")
 
 
@@ -90,12 +91,27 @@ class Menu(object):
         found = False
 
         # Away Info
-        awayTeamName = scores['dates'][0]['games'][0]['teams']['away']['team']['name']
-        awayTeamScore = scores['dates'][0]['games'][0]['teams']['away']['score']
+        dateIndex = 0
+        awayTeamName = ""
+        awayTeamScore = ""
+
+        # Loop until we find a valid score
+        # while found is False:
+        try:
+            print(f"Trying index: {dateIndex}")
+            awayTeamName = scores['teams'][0]['previousGameSchedule']['dates'][0]['games'][0]['teams']['away']['team']['name']
+            found = True
+        except IndexError:
+            print("Bad index.")
+            dateIndex += 1
+            print(f"Increased to..{dateIndex}")
+
+        awayTeamScore = scores['teams'][0]['previousGameSchedule']['dates'][0]['games'][0]['teams']['away']['score']
 
         # Home Info
-        homeTeamName = scores['dates'][0]['games'][0]['teams']['home']['team']['name']
-        homeTeamScore = scores['dates'][0]['games'][0]['teams']['home']['score']
+        homeTeamName = scores['teams'][0]['previousGameSchedule']['dates'][0]['games'][0]['teams']['home']['team']['name']
+        homeTeamScore = scores['teams'][0]['previousGameSchedule']['dates'][0]['games'][0]['teams']['home']['score']
+
 
         # Format and display info
         print(f"{awayTeamName} {awayTeamScore}\n"

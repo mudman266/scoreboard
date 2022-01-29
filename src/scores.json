@@ -1,71 +1,114 @@
 {
   "copyright" : "NHL and the NHL Shield are registered trademarks of the National Hockey League. NHL and NHL team marks are the property of the NHL and its teams. © NHL 2022. All Rights Reserved.",
-  "totalItems" : 1,
-  "totalEvents" : 0,
-  "totalGames" : 1,
-  "totalMatches" : 0,
-  "metaData" : {
-    "timeStamp" : "20220123_033521"
-  },
-  "wait" : 10,
-  "dates" : [ {
-    "date" : "2022-01-22",
-    "totalItems" : 1,
-    "totalEvents" : 0,
-    "totalGames" : 1,
-    "totalMatches" : 0,
-    "games" : [ {
-      "gamePk" : 2021020724,
-      "link" : "/api/v1/game/2021020724/feed/live",
-      "gameType" : "R",
-      "season" : "20212022",
-      "gameDate" : "2022-01-23T00:00:00Z",
-      "status" : {
-        "abstractGameState" : "Final",
-        "codedGameState" : "7",
-        "detailedState" : "Final",
-        "statusCode" : "7",
-        "startTimeTBD" : false
-      },
-      "teams" : {
-        "away" : {
-          "leagueRecord" : {
-            "wins" : 27,
-            "losses" : 9,
-            "ot" : 2,
-            "type" : "league"
-          },
-          "score" : 4,
-          "team" : {
-            "id" : 12,
-            "name" : "Carolina Hurricanes",
-            "link" : "/api/v1/teams/12"
-          }
-        },
-        "home" : {
-          "leagueRecord" : {
-            "wins" : 15,
-            "losses" : 19,
-            "ot" : 5,
-            "type" : "league"
-          },
-          "score" : 7,
-          "team" : {
-            "id" : 1,
-            "name" : "New Jersey Devils",
-            "link" : "/api/v1/teams/1"
-          }
-        }
-      },
-      "venue" : {
-        "name" : "Prudential Center",
-        "link" : "/api/v1/venues/null"
-      },
-      "content" : {
-        "link" : "/api/v1/game/2021020724/content"
+  "teams" : [ {
+    "id" : 12,
+    "name" : "Carolina Hurricanes",
+    "link" : "/api/v1/teams/12",
+    "venue" : {
+      "id" : 5066,
+      "name" : "PNC Arena",
+      "link" : "/api/v1/venues/5066",
+      "city" : "Raleigh",
+      "timeZone" : {
+        "id" : "America/New_York",
+        "offset" : -5,
+        "tz" : "EST"
       }
-    } ],
-    "events" : [ ],
-    "matches" : [ ]
+    },
+    "abbreviation" : "CAR",
+    "teamName" : "Hurricanes",
+    "locationName" : "Carolina",
+    "firstYearOfPlay" : "1979",
+    "division" : {
+      "id" : 18,
+      "name" : "Metropolitan",
+      "nameShort" : "Metro",
+      "link" : "/api/v1/divisions/18",
+      "abbreviation" : "M"
+    },
+    "conference" : {
+      "id" : 6,
+      "name" : "Eastern",
+      "link" : "/api/v1/conferences/6"
+    },
+    "franchise" : {
+      "franchiseId" : 26,
+      "teamName" : "Hurricanes",
+      "link" : "/api/v1/franchises/26"
+    },
+    "previousGameSchedule" : {
+      "totalItems" : 1,
+      "totalEvents" : 0,
+      "totalGames" : 1,
+      "totalMatches" : 0,
+      "metaData" : {
+        "timeStamp" : "20220129_013324"
+      },
+      "dates" : [ {
+        "date" : "2022-01-27",
+        "totalItems" : 1,
+        "totalEvents" : 0,
+        "totalGames" : 1,
+        "totalMatches" : 0,
+        "games" : [ {
+          "gamePk" : 2021020758,
+          "link" : "/api/v1/game/2021020758/feed/live",
+          "gameType" : "R",
+          "season" : "20212022",
+          "gameDate" : "2022-01-28T00:00:00Z",
+          "status" : {
+            "abstractGameState" : "Final",
+            "codedGameState" : "7",
+            "detailedState" : "Final",
+            "statusCode" : "7",
+            "startTimeTBD" : false
+          },
+          "teams" : {
+            "away" : {
+              "leagueRecord" : {
+                "wins" : 29,
+                "losses" : 9,
+                "ot" : 2,
+                "type" : "league"
+              },
+              "score" : 3,
+              "team" : {
+                "id" : 12,
+                "name" : "Carolina Hurricanes",
+                "link" : "/api/v1/teams/12"
+              }
+            },
+            "home" : {
+              "leagueRecord" : {
+                "wins" : 13,
+                "losses" : 20,
+                "ot" : 4,
+                "type" : "league"
+              },
+              "score" : 2,
+              "team" : {
+                "id" : 9,
+                "name" : "Ottawa Senators",
+                "link" : "/api/v1/teams/9"
+              }
+            }
+          },
+          "venue" : {
+            "id" : 5031,
+            "name" : "Canadian Tire Centre",
+            "link" : "/api/v1/venues/5031"
+          },
+          "content" : {
+            "link" : "/api/v1/game/2021020758/content"
+          }
+        } ],
+        "events" : [ ],
+        "matches" : [ ]
+      } ]
+    },
+    "shortName" : "Carolina",
+    "officialSiteUrl" : "http://www.carolinahurricanes.com/",
+    "franchiseId" : 26,
+    "active" : true
   } ]
 }

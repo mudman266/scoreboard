@@ -6,6 +6,9 @@ import menu
 
 class Settings:
 
+    def __init__(self):
+        self.lastUpdate = ""
+
     @staticmethod
     def printMenu():
         # Prints the menu and returns a valid selection

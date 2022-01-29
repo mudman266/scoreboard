@@ -12,6 +12,8 @@ import urllib3
 import editSports
 import settings
 
+debugging = True
+
 
 class Menu(object):
     def __init__(self):
@@ -98,13 +100,16 @@ class Menu(object):
         # Loop until we find a valid score
         # while found is False:
         try:
-            print(f"Trying index: {dateIndex}")
+            if debugging:
+                print(f"Trying index: {dateIndex}")
             awayTeamName = scores['teams'][0]['previousGameSchedule']['dates'][0]['games'][0]['teams']['away']['team']['name']
             found = True
         except IndexError:
-            print("Bad index.")
+            if debugging:
+                print("Bad index.")
             dateIndex += 1
-            print(f"Increased to..{dateIndex}")
+            if debugging:
+                print(f"Increased to..{dateIndex}")
 
         awayTeamScore = scores['teams'][0]['previousGameSchedule']['dates'][0]['games'][0]['teams']['away']['score']
 
@@ -112,7 +117,12 @@ class Menu(object):
         homeTeamName = scores['teams'][0]['previousGameSchedule']['dates'][0]['games'][0]['teams']['home']['team']['name']
         homeTeamScore = scores['teams'][0]['previousGameSchedule']['dates'][0]['games'][0]['teams']['home']['score']
 
+        # Game date
+        gameDate = scores['teams'][0]['previousGameSchedule']['dates'][0]['date']
+        gameDateFormatted = datetime.datetime.strftime(datetime.datetime.strptime(gameDate, '%Y-%m-%d'), '%m/%d/%Y')
 
         # Format and display info
-        print(f"{awayTeamName} {awayTeamScore}\n"
+        print(f"Last Game...\n"
+              f"Date: {gameDateFormatted}\n"
+              f"{awayTeamName} {awayTeamScore}\n"
               f"{homeTeamName} {homeTeamScore}")

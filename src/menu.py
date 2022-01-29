@@ -64,7 +64,7 @@ class Menu(object):
 
         # Make the request and save the result
 
-        # If we have no lastUpdate value or if it is more than 15 mins in the past,
+        # If lastUpdate value is blank or more than 15 mins in the past,
         # run the update and update the last update time
         timeMinus15Mins = datetime.timedelta(minutes=15)
         scoresFile = curPath + "/src/scores.json"
@@ -92,10 +92,15 @@ class Menu(object):
         date = datetime.date.today()
         found = False
 
-        # Away Info
+        # ----- Start Away Info -----
+
         dateIndex = 0
         awayTeamName = ""
         awayTeamScore = ""
+
+        # TODO: Break the below code into two functions in a class
+        # TODO: 1) Find the dateindex
+        # TODO: 2) Get scores for the last game of a team
 
         # Loop until we find a valid score
         # while found is False:
@@ -113,13 +118,22 @@ class Menu(object):
 
         awayTeamScore = scores['teams'][0]['previousGameSchedule']['dates'][0]['games'][0]['teams']['away']['score']
 
-        # Home Info
+        # ----- End Away Info -----
+
+        # ----- Start Home Info -----
+
         homeTeamName = scores['teams'][0]['previousGameSchedule']['dates'][0]['games'][0]['teams']['home']['team']['name']
         homeTeamScore = scores['teams'][0]['previousGameSchedule']['dates'][0]['games'][0]['teams']['home']['score']
+
+        # ----- End Home Info -----
+
+        # ----- Start Game Info -----
 
         # Game date
         gameDate = scores['teams'][0]['previousGameSchedule']['dates'][0]['date']
         gameDateFormatted = datetime.datetime.strftime(datetime.datetime.strptime(gameDate, '%Y-%m-%d'), '%m/%d/%Y')
+
+        # ----- End Game Info -----
 
         # Format and display info
         print(f"Last Game...\n"

@@ -9,7 +9,7 @@ import collections
 def main_sequence():
     # Show the menu
     userMenu = menu.Menu()
-    userMenu.printMenu()
+    userMenu.print_menu()
 
 
 if __name__ == "__main__":

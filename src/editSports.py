@@ -4,7 +4,7 @@
 
 import urllib3, shutil
 import json
-
+import menu, settings
 
 class Sports:
 
@@ -12,20 +12,58 @@ class Sports:
         pass
 
     @staticmethod
-    def showSports():
+    def show_sports():
         print(f"Showing sports....")
-        # NHL Hockey
-        Sports.showHockeyTeams()
+        # TODO: Print menu of sports and teams with ability to enable/disable team
+        pass
+
 
     @staticmethod
-    def showHockeyTeams():
-        _settingsFiles = open('settings.json')
-        settings = json.loads(_settingsFiles.read())
-        scoreboardPath = settings["pathToScoreBoard"]
-        NHLurl = 'https://statsapi.web.nhl.com/api/v1/teams'
+    def show_hockey_teams():
+        menu.Menu.update_files()
+        my_settings = settings.Settings()
+        curSettings = my_settings.getSettings()
+        curPath = curSettings["pathToScoreBoard"]
+        teams_file_path = curPath + "/src/hockey.json"
 
-        # TODO - Update to use a env variable for the save location
-        c = urllib3.PoolManager()
-        NHLFile = scoreboardPath + '/src/hockey.json'
-        with c.request('GET', NHLurl, preload_content=False) as res, open(NHLFile, 'wb') as out_file:
-            shutil.copyfileobj(res, out_file)
+        subscribed_file_path = curPath + "/src/subscribed.json"
+        with open(subscribed_file_path) as subscribed_file_stream:
+            subscribed_file_json = json.load(subscribed_file_stream)
+
+            with open(teams_file_path, 'r') as teams_file_stream:
+                teams_file_json = json.load(teams_file_stream)
+
+                numeric_label = 1
+
+                for team in teams_file_json["teams"]:
+                    if str(team["franchise"]["franchiseId"]) in subscribed_file_json["hockey"]:
+                        print(f'{numeric_label}) [X] {team["name"]}')
+                    else:
+                        print(f'{numeric_label}) [ ] {team["name"]}')
+                    numeric_label += 1
+            teams_file_stream.close()
+        subscribed_file_stream.close()
+
+        # TODO - The choice needs to find the franchiseId of that team and add toggle it instead of list item number
+        Sports.toggle_subscribe("hockey", input("Choice: "))
+
+    @staticmethod
+    def toggle_subscribe(group_name, team_id):
+        my_settings = settings.Settings()
+        curSettings = my_settings.getSettings()
+        curPath = curSettings["pathToScoreBoard"]
+        subscribed_file_path = curPath + "/src/subscribed.json"
+        with open(subscribed_file_path, 'r') as subscribed_file_stream:
+            subscribed_file_json = json.load(subscribed_file_stream)
+            if team_id in subscribed_file_json[group_name]:
+                subscribed_file_json[group_name].remove(team_id)
+            else:
+                subscribed_file_json[group_name].append(team_id)
+        subscribed_file_stream.close()
+
+        subscribed_file_writer = open(subscribed_file_path, 'w')
+        subscribed_file_serialized = json.dumps(subscribed_file_json, indent=2)
+        subscribed_file_writer.write(subscribed_file_serialized)
+
+        if curSettings["debugging"] == True:
+            print("Successfully toggled team.")

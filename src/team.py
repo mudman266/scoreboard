@@ -20,7 +20,7 @@ class Team:
     def get_team(self, id):
         my_settings = settings.Settings()
         my_settings.get_settings()
-        teams_file_path = my_settings.cur_path + "/src/hockey.json"
+        teams_file_path = my_settings.cur_path + "/src/data/hockey.json"
 
         with open(teams_file_path, 'r') as teams_file_stream:
             teams_file_json = json.load(teams_file_stream)

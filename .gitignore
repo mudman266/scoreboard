@@ -1,6 +1,5 @@
-src/subscribed.json
+src/data/subscribed.json
 .idea/workspace.xml
 .idea/vcs.xml
-src/settings.json
-src/scores.json
-src/lstSports.json
+src/data/settings.json
+src/data/scores.json

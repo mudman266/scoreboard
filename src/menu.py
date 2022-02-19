@@ -55,13 +55,11 @@ class Menu(object):
 
         # Parse the scores file
         my_settings = settings.Settings()
-        curSettings = my_settings.getSettings()
-        curPath = curSettings["pathToScoreBoard"]
-        scoresFile = curPath + "/src/scores.json"
-        updatedScores = open(scoresFile, "r")
-        scores = json.load(updatedScores)
+        my_settings.get_settings()
+        scores_file = my_settings.cur_path + "/src/data/scores.json"
+        updated_scores = open(scores_file, "r")
+        scores = json.load(updated_scores)
         date = datetime.date.today()
-        found = False
 
         # ----- Start Away Info -----
 
@@ -76,10 +74,9 @@ class Menu(object):
         # Loop until we find a valid score
         # while found is False:
         try:
-            if debugging:
+            if my_settings.debugging == True:
                 print(f"Trying index: {dateIndex}")
-            awayTeamName = scores['teams'][0]['previousGameSchedule']['dates'][0]['games'][0]['teams']['away']['team']['name']
-            found = True
+            awayTeamName = scores['dates'][0]['games'][0]['teams']['away']['team']['name']
         except IndexError:
             if debugging:
                 print("Bad index.")
@@ -87,21 +84,21 @@ class Menu(object):
             if debugging:
                 print(f"Increased to..{dateIndex}")
 
-        awayTeamScore = scores['teams'][0]['previousGameSchedule']['dates'][0]['games'][0]['teams']['away']['score']
+        awayTeamScore = scores['dates'][0]['games'][0]['teams']['away']['score']
 
         # ----- End Away Info -----
 
         # ----- Start Home Info -----
 
-        homeTeamName = scores['teams'][0]['previousGameSchedule']['dates'][0]['games'][0]['teams']['home']['team']['name']
-        homeTeamScore = scores['teams'][0]['previousGameSchedule']['dates'][0]['games'][0]['teams']['home']['score']
+        homeTeamName = scores['dates'][0]['games'][0]['teams']['home']['team']['name']
+        homeTeamScore = scores['dates'][0]['games'][0]['teams']['home']['score']
 
         # ----- End Home Info -----
 
         # ----- Start Game Info -----
 
         # Game date
-        gameDate = scores['teams'][0]['previousGameSchedule']['dates'][0]['date']
+        gameDate = scores['dates'][0]['date']
         gameDateFormatted = datetime.datetime.strftime(datetime.datetime.strptime(gameDate, '%Y-%m-%d'), '%m/%d/%Y')
 
         # ----- End Game Info -----
@@ -109,8 +106,8 @@ class Menu(object):
         # Format and display info
         print(f"Last Game...\n"
               f"Date: {gameDateFormatted}\n"
-              f"{awayTeamName} {awayTeamScore}\n"
-              f"{homeTeamName} {homeTeamScore}")
+              f"{awayTeamName} - {awayTeamScore}\n"
+              f"{homeTeamName} - {homeTeamScore}")
 
     @staticmethod
     def edit_teams():
@@ -118,14 +115,14 @@ class Menu(object):
 
     @staticmethod
     def update_files():
-        # do we need to update our scores file - check settings file
+        # do we need to update our scores file - check settings file for the last update timestamp
         my_settings = settings.Settings()
         my_settings.get_settings()
 
         # If lastUpdate value is blank or more than 15 mins in the past,
         # run the update and update the last update time
         timeMinus15Mins = datetime.timedelta(minutes=15)
-        scoresFile = my_settings.cur_path + "/src/scores.json"
+        scores_file = my_settings.cur_path + "/src/data/scores.json"
         if my_settings.last_update == ("") or (
             my_settings.last_update <= (datetime.datetime.timestamp(datetime.datetime.now() - timeMinus15Mins))):
             # Updating scores
@@ -133,20 +130,19 @@ class Menu(object):
 
             # Build the URLs
             hockey_urls = [f"https://statsapi.web.nhl.com/api/v1/teams",
-                        f"https://statsapi.web.nhl.com/api/v1/teams/12?expand=team.schedule.previous"
+                           "https://statsapi.web.nhl.com/api/v1/schedule"
                         ]
 
-            settingsFile = my_settings.cur_path + "/src/settings.json"
 
-            hockey_files = [my_settings.cur_path + "/src/hockey.json",
-                            my_settings.cur_path + "/src/lastHurricaneGame.json"
+            hockey_files = [my_settings.cur_path + "/src/data/hockey.json",
+                            my_settings.cur_path + "/src/data/scores.json"
             ]
 
             c = urllib3.PoolManager()
 
             # TODO: Read settings file and then change 'lastUpdate' to avoid losing all other info
             my_settings.last_update = datetime.datetime.timestamp(datetime.datetime.now())
-            a = open(settingsFile, 'w')
+            a = open(my_settings.cur_path + "/src/data/settings.json", 'w')
             json.dump(my_settings.__dict__, a)
             a.close()
             for i in range(0, len(hockey_urls)):
@@ -155,7 +151,7 @@ class Menu(object):
                     shutil.copyfileobj(res, out_file)
         else:
             # Last update within 15 mins
-            print(str(lastUpdate) + " was greater than " + str(
+            print(str(last_update) + " was greater than " + str(
                 datetime.datetime.timestamp(datetime.datetime.now() - timeMinus15Mins)))
             print("tminus15mins: " + str(timeMinus15Mins))
             print("Last update < 15 mins ago...skipping update.")

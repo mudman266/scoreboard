@@ -120,16 +120,14 @@ class Menu(object):
     def update_files():
         # do we need to update our scores file - check settings file
         my_settings = settings.Settings()
-        curSettings = my_settings.getSettings()
-        curPath = curSettings["pathToScoreBoard"]
-        lastUpdate = curSettings["lastUpdate"]
+        my_settings.get_settings()
 
         # If lastUpdate value is blank or more than 15 mins in the past,
         # run the update and update the last update time
         timeMinus15Mins = datetime.timedelta(minutes=15)
-        scoresFile = curPath + "/src/scores.json"
-        if lastUpdate == ("") or (
-            lastUpdate <= (datetime.datetime.timestamp(datetime.datetime.now() - timeMinus15Mins))):
+        scoresFile = my_settings.cur_path + "/src/scores.json"
+        if my_settings.last_update == ("") or (
+            my_settings.last_update <= (datetime.datetime.timestamp(datetime.datetime.now() - timeMinus15Mins))):
             # Updating scores
             print("Updating scores...")
 
@@ -138,18 +136,18 @@ class Menu(object):
                         f"https://statsapi.web.nhl.com/api/v1/teams/12?expand=team.schedule.previous"
                         ]
 
-            settingsFile = curPath + "/src/settings.json"
+            settingsFile = my_settings.cur_path + "/src/settings.json"
 
-            hockey_files = [curPath + "/src/hockey.json",
-            curPath + "/src/lastHurricaneGame.json"
+            hockey_files = [my_settings.cur_path + "/src/hockey.json",
+                            my_settings.cur_path + "/src/lastHurricaneGame.json"
             ]
 
             c = urllib3.PoolManager()
 
             # TODO: Read settings file and then change 'lastUpdate' to avoid losing all other info
-            curSettings['lastUpdate'] = datetime.datetime.timestamp(datetime.datetime.now())
+            my_settings.last_update = datetime.datetime.timestamp(datetime.datetime.now())
             a = open(settingsFile, 'w')
-            json.dump(curSettings, a)
+            json.dump(my_settings.__dict__, a)
             a.close()
             for i in range(0, len(hockey_urls)):
                 with c.request('GET', hockey_urls[i], preload_content=False) as res, open(hockey_files[i], 'wb')\

@@ -42,20 +42,20 @@
       "totalGames" : 1,
       "totalMatches" : 0,
       "metaData" : {
-        "timeStamp" : "20220204_040256"
+        "timeStamp" : "20220219_044251"
       },
       "dates" : [ {
-        "date" : "2022-01-30",
+        "date" : "2022-02-18",
         "totalItems" : 1,
         "totalEvents" : 0,
         "totalGames" : 1,
         "totalMatches" : 0,
         "games" : [ {
-          "gamePk" : 2021020787,
-          "link" : "/api/v1/game/2021020787/feed/live",
+          "gamePk" : 2021020485,
+          "link" : "/api/v1/game/2021020485/feed/live",
           "gameType" : "R",
           "season" : "20212022",
-          "gameDate" : "2022-01-30T22:00:00Z",
+          "gameDate" : "2022-02-19T00:00:00Z",
           "status" : {
             "abstractGameState" : "Final",
             "codedGameState" : "7",
@@ -66,26 +66,26 @@
           "teams" : {
             "away" : {
               "leagueRecord" : {
-                "wins" : 22,
-                "losses" : 20,
-                "ot" : 3,
+                "wins" : 28,
+                "losses" : 18,
+                "ot" : 4,
                 "type" : "league"
               },
-              "score" : 1,
+              "score" : 3,
               "team" : {
-                "id" : 28,
-                "name" : "San Jose Sharks",
-                "link" : "/api/v1/teams/28"
+                "id" : 18,
+                "name" : "Nashville Predators",
+                "link" : "/api/v1/teams/18"
               }
             },
             "home" : {
               "leagueRecord" : {
-                "wins" : 31,
-                "losses" : 9,
-                "ot" : 2,
+                "wins" : 33,
+                "losses" : 11,
+                "ot" : 4,
                 "type" : "league"
               },
-              "score" : 2,
+              "score" : 5,
               "team" : {
                 "id" : 12,
                 "name" : "Carolina Hurricanes",
@@ -99,7 +99,7 @@
             "link" : "/api/v1/venues/5066"
           },
           "content" : {
-            "link" : "/api/v1/game/2021020787/content"
+            "link" : "/api/v1/game/2021020485/content"
           }
         } ],
         "events" : [ ],

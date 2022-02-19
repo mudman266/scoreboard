@@ -7,8 +7,9 @@ import menu
 class Settings:
 
     def __init__(self):
-        self.lastUpdate = ""
-        self.debugging = ""
+        self.lastUpdate = ''
+        self.debugging = ''
+        self.cur_path = ''
 
     @staticmethod
     def printMenu():
@@ -48,9 +49,12 @@ class Settings:
     def exitToMain(self):
         menu.Menu.printMenu()
 
-    def getSettings(self):
+    def get_settings(self):
         # Grab the local path from settings file
         _settingsFile = open('settings.json')
         settings = json.load(_settingsFile)
         _settingsFile.close()
+        self.debugging = True if settings['debugging'] == True else False
+        self.cur_path = settings['cur_path']
+        self.last_update = settings['lastUpdate']
         return settings

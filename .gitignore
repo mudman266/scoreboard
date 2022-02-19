@@ -1,5 +1,5 @@
-src/data/subscribed.json
+subscribed.json
 .idea/workspace.xml
 .idea/vcs.xml
-src/data/settings.json
-src/data/scores.json
+settings.json
+scores.json

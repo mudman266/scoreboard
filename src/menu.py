@@ -11,6 +11,7 @@ import urllib3
 # import pages
 import editSports
 import settings
+import game
 
 debugging = True
 
@@ -59,37 +60,31 @@ class Menu(object):
         scores_file = my_settings.cur_path + "/src/data/scores.json"
         updated_scores = open(scores_file, "r")
         scores = json.load(updated_scores)
-        date = datetime.date.today()
+        subscribed_teams = open(my_settings.cur_path + "/src/data/subscribed.json", "r")
+        subscribed_team_ids = json.load(subscribed_teams)
 
-        # ----- Start Away Info -----
+        subscribed_team_games = []
 
         # TODO: Get scores for the last game of a team
+        for game_score in scores['dates'][0]['games']:
+            if (game_score['teams']['away']['team']['id'] in subscribed_team_ids["hockey"]) or (game_score['teams']['home']['team']['id'] in subscribed_team_ids["hockey"]):
+                valid_game = game.Game(game_score['teams']['home']['team']['id'], game_score['teams']['away']['team']['id'])
 
-        awayTeamName = scores['dates'][0]['games'][0]['teams']['away']['team']['name']
-        awayTeamScore = scores['dates'][0]['games'][0]['teams']['away']['score']
+                valid_game.home_team.score = game_score['teams']['home']['score']
+                valid_game.away_team.score = game_score['teams']['away']['score']
 
-        # ----- End Away Info -----
+                gameDate = datetime.datetime.strptime(game_score["gameDate"], "%Y-%m-%dT%H:%M:%SZ")
+                valid_game.date = gameDate.strftime("%m-%d-%Y")
 
-        # ----- Start Home Info -----
+                subscribed_team_games.append(valid_game)
 
-        homeTeamName = scores['dates'][0]['games'][0]['teams']['home']['team']['name']
-        homeTeamScore = scores['dates'][0]['games'][0]['teams']['home']['score']
+        print("Recent Games:\n")
 
-        # ----- End Home Info -----
-
-        # ----- Start Game Info -----
-
-        # Game date
-        gameDate = scores['dates'][0]['date']
-        gameDateFormatted = datetime.datetime.strftime(datetime.datetime.strptime(gameDate, '%Y-%m-%d'), '%m/%d/%Y')
-
-        # ----- End Game Info -----
-
-        # Format and display info
-        print(f"Last Game...\n"
-              f"Date: {gameDateFormatted}\n"
-              f"{awayTeamName} - {awayTeamScore}\n"
-              f"{homeTeamName} - {homeTeamScore}")
+        for subscribed_game in subscribed_team_games:
+            # Format and display info
+            print(f"Date: {subscribed_game.date}\n"
+                  f"{subscribed_game.away_team.name} - {subscribed_game.away_team.score}\n"
+                  f"{subscribed_game.home_team.name} - {subscribed_game.home_team.score}\n")
 
     @staticmethod
     def edit_teams():
@@ -112,7 +107,7 @@ class Menu(object):
 
             # Build the URLs
             hockey_urls = [f"https://statsapi.web.nhl.com/api/v1/teams",
-                           "https://statsapi.web.nhl.com/api/v1/schedule"
+                           f"https://statsapi.web.nhl.com/api/v1/schedule"
                         ]
 
             # Where to store the files from the urls

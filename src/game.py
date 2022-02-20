@@ -12,3 +12,4 @@ class Game:
 
         self.home_team = home_team
         self.away_team = away_team
+        self.date = ''

@@ -41,7 +41,7 @@ class Team:
                         self.division = team['division']['id']
                         self.franchise_id = team['franchise']['franchiseId']
                         if my_settings.debugging == True:
-                            print(f"Franchise ID: {self.franchise_id}")
+                            print(f"Created team object for franchise ID: {self.franchise_id}, {self.location_and_team_name}")
                 elif team_name is not None:
                     if str(lower(team['team_name'])) == str(lower(team_name)):
                         self.id = team['id']

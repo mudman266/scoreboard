@@ -52,5 +52,5 @@ class Settings:
         _settingsFile.close()
         self.debugging = True if settings['debugging'] else False
         self.cur_path = settings['cur_path']
-        self.last_update = settings['lastUpdate']
+        self.last_update = settings['last_update']
         return settings

@@ -7,7 +7,7 @@ import menu
 class Settings:
 
     def __init__(self):
-        self.lastUpdate = ''
+        self.last_update = ''
         self.debugging = ''
         self.cur_path = ''
 
@@ -34,14 +34,8 @@ class Settings:
             print("Not a valid selection. Try again.")
             Settings.printMenu()
 
-    def print_settings(self):
-        # Local path
-        settings = self.get_settings()
-        _localPath = settings['cur_path']
-        print(f"Local path: {_localPath}")
-
-        # Back to the menu
-        self.print_menu()
+    def __str__(self):
+        return str(self.last_update)
 
     def edit_settings(self):
         # TODO - Implement changing of settings

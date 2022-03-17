@@ -1,6 +1,6 @@
 src/subscribed.json
-.idea/workspace.xml
-.idea/vcs.xml
+.idea/*
+src/__pycache__/*
 src/settings.json
 src/scores.json
 src/lstSports.json

@@ -42,20 +42,20 @@
       "totalGames" : 1,
       "totalMatches" : 0,
       "metaData" : {
-        "timeStamp" : "20220204_022352"
+        "timeStamp" : "20220129_015119"
       },
       "dates" : [ {
-        "date" : "2022-01-30",
+        "date" : "2022-01-27",
         "totalItems" : 1,
         "totalEvents" : 0,
         "totalGames" : 1,
         "totalMatches" : 0,
         "games" : [ {
-          "gamePk" : 2021020787,
-          "link" : "/api/v1/game/2021020787/feed/live",
+          "gamePk" : 2021020758,
+          "link" : "/api/v1/game/2021020758/feed/live",
           "gameType" : "R",
           "season" : "20212022",
-          "gameDate" : "2022-01-30T22:00:00Z",
+          "gameDate" : "2022-01-28T00:00:00Z",
           "status" : {
             "abstractGameState" : "Final",
             "codedGameState" : "7",
@@ -66,40 +66,40 @@
           "teams" : {
             "away" : {
               "leagueRecord" : {
-                "wins" : 22,
-                "losses" : 20,
-                "ot" : 3,
-                "type" : "league"
-              },
-              "score" : 1,
-              "team" : {
-                "id" : 28,
-                "name" : "San Jose Sharks",
-                "link" : "/api/v1/teams/28"
-              }
-            },
-            "home" : {
-              "leagueRecord" : {
-                "wins" : 31,
+                "wins" : 29,
                 "losses" : 9,
                 "ot" : 2,
                 "type" : "league"
               },
-              "score" : 2,
+              "score" : 3,
               "team" : {
                 "id" : 12,
                 "name" : "Carolina Hurricanes",
                 "link" : "/api/v1/teams/12"
               }
+            },
+            "home" : {
+              "leagueRecord" : {
+                "wins" : 13,
+                "losses" : 20,
+                "ot" : 4,
+                "type" : "league"
+              },
+              "score" : 2,
+              "team" : {
+                "id" : 9,
+                "name" : "Ottawa Senators",
+                "link" : "/api/v1/teams/9"
+              }
             }
           },
           "venue" : {
-            "id" : 5066,
-            "name" : "PNC Arena",
-            "link" : "/api/v1/venues/5066"
+            "id" : 5031,
+            "name" : "Canadian Tire Centre",
+            "link" : "/api/v1/venues/5031"
           },
           "content" : {
-            "link" : "/api/v1/game/2021020787/content"
+            "link" : "/api/v1/game/2021020758/content"
           }
         } ],
         "events" : [ ],

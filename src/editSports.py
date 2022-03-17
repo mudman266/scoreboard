@@ -44,9 +44,6 @@ class Sports:
             teams_file_stream.close()
         subscribed_file_stream.close()
 
-        # TODO - The choice needs to find the franchiseId of that team and add toggle it instead of list item number
-        Sports.toggle_subscribe("hockey", input("Choice: "))
-
     @staticmethod
     def toggle_subscribe(group_name, team_id):
         my_settings = settings.Settings()

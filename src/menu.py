@@ -11,6 +11,7 @@ import urllib3
 # import pages
 import editSports
 import settings
+import game
 
 debugging = True
 
@@ -55,62 +56,35 @@ class Menu(object):
 
         # Parse the scores file
         my_settings = settings.Settings()
-        curSettings = my_settings.getSettings()
-        curPath = curSettings["pathToScoreBoard"]
-        scoresFile = curPath + "/src/scores.json"
-        updatedScores = open(scoresFile, "r")
-        scores = json.load(updatedScores)
-        date = datetime.date.today()
-        found = False
+        my_settings.get_settings()
+        scores_file = my_settings.cur_path + "/src/data/scores.json"
+        updated_scores = open(scores_file, "r")
+        scores = json.load(updated_scores)
+        subscribed_teams = open(my_settings.cur_path + "/src/data/subscribed.json", "r")
+        subscribed_team_ids = json.load(subscribed_teams)
 
-        # ----- Start Away Info -----
+        subscribed_team_games = []
 
-        dateIndex = 0
-        awayTeamName = ""
-        awayTeamScore = ""
+        # TODO: Get scores for the last game of a team
+        for game_score in scores['dates'][0]['games']:
+            if (game_score['teams']['away']['team']['id'] in subscribed_team_ids["hockey"]) or (game_score['teams']['home']['team']['id'] in subscribed_team_ids["hockey"]):
+                valid_game = game.Game(game_score['teams']['home']['team']['id'], game_score['teams']['away']['team']['id'])
 
-        # TODO: Break the below code into two functions in a class
-        # TODO: 1) Find the dateindex
-        # TODO: 2) Get scores for the last game of a team
+                valid_game.home_team.score = game_score['teams']['home']['score']
+                valid_game.away_team.score = game_score['teams']['away']['score']
 
-        # Loop until we find a valid score
-        # while found is False:
-        try:
-            if debugging:
-                print(f"Trying index: {dateIndex}")
-            awayTeamName = scores['teams'][0]['previousGameSchedule']['dates'][0]['games'][0]['teams']['away']['team']['name']
-            found = True
-        except IndexError:
-            if debugging:
-                print("Bad index.")
-            dateIndex += 1
-            if debugging:
-                print(f"Increased to..{dateIndex}")
+                gameDate = datetime.datetime.strptime(game_score["gameDate"], "%Y-%m-%dT%H:%M:%SZ")
+                valid_game.date = gameDate.strftime("%m-%d-%Y")
 
-        awayTeamScore = scores['teams'][0]['previousGameSchedule']['dates'][0]['games'][0]['teams']['away']['score']
+                subscribed_team_games.append(valid_game)
 
-        # ----- End Away Info -----
+        print("Recent Games:\n")
 
-        # ----- Start Home Info -----
-
-        homeTeamName = scores['teams'][0]['previousGameSchedule']['dates'][0]['games'][0]['teams']['home']['team']['name']
-        homeTeamScore = scores['teams'][0]['previousGameSchedule']['dates'][0]['games'][0]['teams']['home']['score']
-
-        # ----- End Home Info -----
-
-        # ----- Start Game Info -----
-
-        # Game date
-        gameDate = scores['teams'][0]['previousGameSchedule']['dates'][0]['date']
-        gameDateFormatted = datetime.datetime.strftime(datetime.datetime.strptime(gameDate, '%Y-%m-%d'), '%m/%d/%Y')
-
-        # ----- End Game Info -----
-
-        # Format and display info
-        print(f"Last Game...\n"
-              f"Date: {gameDateFormatted}\n"
-              f"{awayTeamName} {awayTeamScore}\n"
-              f"{homeTeamName} {homeTeamScore}")
+        for subscribed_game in subscribed_team_games:
+            # Format and display info
+            print(f"Date: {subscribed_game.date}\n"
+                  f"{subscribed_game.away_team.name} - {subscribed_game.away_team.score}\n"
+                  f"{subscribed_game.home_team.name} - {subscribed_game.home_team.score}\n")
 
     @staticmethod
     def edit_teams():
@@ -118,46 +92,45 @@ class Menu(object):
 
     @staticmethod
     def update_files():
-        # do we need to update our scores file - check settings file
+        # do we need to update our scores file - check settings file for the last update timestamp
         my_settings = settings.Settings()
-        curSettings = my_settings.getSettings()
-        curPath = curSettings["pathToScoreBoard"]
-        lastUpdate = curSettings["lastUpdate"]
+        my_settings.get_settings()
 
         # If lastUpdate value is blank or more than 15 mins in the past,
         # run the update and update the last update time
         timeMinus15Mins = datetime.timedelta(minutes=15)
-        scoresFile = curPath + "/src/scores.json"
-        if lastUpdate == ("") or (
-            lastUpdate <= (datetime.datetime.timestamp(datetime.datetime.now() - timeMinus15Mins))):
+        if my_settings.last_update == ("") or (
+            my_settings.last_update <= (datetime.datetime.timestamp(datetime.datetime.now() - timeMinus15Mins))):
+
             # Updating scores
             print("Updating scores...")
 
             # Build the URLs
             hockey_urls = [f"https://statsapi.web.nhl.com/api/v1/teams",
-                        f"https://statsapi.web.nhl.com/api/v1/teams/12?expand=team.schedule.previous"
+                           f"https://statsapi.web.nhl.com/api/v1/schedule"
                         ]
 
-            settingsFile = curPath + "/src/settings.json"
-
-            hockey_files = [curPath + "/src/hockey.json",
-            curPath + "/src/lastHurricaneGame.json"
+            # Where to store the files from the urls
+            hockey_files = [my_settings.cur_path + "/src/data/hockey.json",
+                            my_settings.cur_path + "/src/data/scores.json"
             ]
 
             c = urllib3.PoolManager()
 
-            # TODO: Read settings file and then change 'lastUpdate' to avoid losing all other info
-            curSettings['lastUpdate'] = datetime.datetime.timestamp(datetime.datetime.now())
-            a = open(settingsFile, 'w')
-            json.dump(curSettings, a)
+            # Update settings.last_update then save to the settings file
+            my_settings.last_update = datetime.datetime.timestamp(datetime.datetime.now())
+            a = open(my_settings.cur_path + "/src/data/settings.json", 'w')
+            json.dump(my_settings.__dict__, a)
             a.close()
+
+            # Get the files from the URLs
             for i in range(0, len(hockey_urls)):
                 with c.request('GET', hockey_urls[i], preload_content=False) as res, open(hockey_files[i], 'wb')\
                 as out_file:
                     shutil.copyfileobj(res, out_file)
         else:
             # Last update within 15 mins
-            print(str(lastUpdate) + " was greater than " + str(
-                datetime.datetime.timestamp(datetime.datetime.now() - timeMinus15Mins)))
-            print("tminus15mins: " + str(timeMinus15Mins))
+            if my_settings.debugging == True:
+                print(str(my_settings.last_update) + " was greater than " + str(
+                    datetime.datetime.timestamp(datetime.datetime.now() - timeMinus15Mins)))
             print("Last update < 15 mins ago...skipping update.")

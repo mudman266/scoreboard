@@ -1,6 +1,15 @@
+<<<<<<< HEAD
 src/subscribed.json
 .idea/*
 src/__pycache__/*
 src/settings.json
 src/scores.json
 src/lstSports.json
+=======
+subscribed.json
+.idea/workspace.xml
+.idea/vcs.xml
+settings.json
+scores.json
+hockey.json
+>>>>>>> 4fbf39be56741c036f947eeb7ddb7d4200fb5d59
